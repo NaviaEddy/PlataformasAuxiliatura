@@ -31,7 +31,7 @@ void APlataformasSpawnGameMode::BeginPlay()
 	for (int i = 0; i < 4; i++) {
 		PT = GetWorld()->SpawnActor<APlataformas>(APlataformas::StaticClass(), Posicion, Rotacion);
 		ContPlataformas.Add(PT);
-		Posicion.Z += 400.0f;
+		Posicion.Z += 500.0f;
 		Posicion.Y += PosicionAuxiliar + FMath::FRandRange(10.f, 25.f);
 		Rotacion.Roll *= -1;
 		PosicionAuxiliar *= -1;
@@ -41,7 +41,7 @@ void APlataformasSpawnGameMode::BeginPlay()
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, 
 		FString::Printf(TEXT("Cantidad del contenedor: %d"), ContPlataformas.Num()));
 
-	Ba = GetWorld()->SpawnActor<ABarril>(ABarril::StaticClass(), FVector(1210.f, 970.f, 1760.f), FRotator::ZeroRotator);
+	Ba = GetWorld()->SpawnActor<ABarril>(ABarril::StaticClass(), FVector(1210.f, 970.f, 1900.f), FRotator::ZeroRotator);
 }
 
 void APlataformasSpawnGameMode::Tick(float DeltaTime)

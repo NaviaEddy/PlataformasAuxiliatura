@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "Barril.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-#include "Barril.h"
 
 // Sets default values
 ABarril::ABarril()
@@ -21,12 +21,20 @@ ABarril::ABarril()
 	SetRootComponent(BarrilMesh);
 
 	//Fisicas y colisiones
-	BarrilMesh->SetSimulatePhysics(true);
-	BarrilMesh->SetEnableGravity(true);
 	BarrilCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Colision_Barril"));
 	BarrilCollision->SetSphereRadius(225.0f);
 	BarrilCollision->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
 	BarrilCollision->SetupAttachment(GetRootComponent());
+
+	// Añadir movimiento de proyectil
+	BarrilMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movimiento_Proyectil"));
+	BarrilMovement->UpdatedComponent = BarrilMesh;
+	BarrilMovement->InitialSpeed = 0.0f;  // Para controlar manualmente la velocidad de movimiento
+	BarrilMovement->MaxSpeed = 1000.0f;  // Velocidad máxima
+	BarrilMovement->bRotationFollowsVelocity = false;
+	BarrilMovement->bShouldBounce = true;  // Permitir que rebote
+	BarrilMovement->Bounciness = 0.6f;  // Configurar elasticidad
+	BarrilMovement->Friction = 0.1f;
 
 	RotationSpeed = 150.f;
 }
@@ -51,6 +59,25 @@ void ABarril::Tick(float DeltaTime)
 	}
 
 	SetActorRotation(CurrentRotation);
+}
+
+void ABarril::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
+{
+	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
+
+	// Aumentar la velocidad de movimiento al rebotar
+	SpeedIncrease = 250.0f;  // Incremento en la velocidad
+	FVector CurrentVelocity = BarrilMovement->Velocity;
+
+	// Aumentar la magnitud de la velocidad, manteniendo la dirección
+	FVector NewVelocity = CurrentVelocity.GetSafeNormal() * (CurrentVelocity.Size() + this->SpeedIncrease);
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("%s"), *NewVelocity.ToString()));
+
+	// Aplicar la nueva velocidad, asegurándonos de no exceder la velocidad máxima
+	if (NewVelocity.Size() <= BarrilMovement->MaxSpeed) {
+		BarrilMovement->Velocity = NewVelocity;
+	}
 }
 
 

@@ -30,6 +30,31 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class USphereComponent* BarrilCollision;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UProjectileMovementComponent* BarrilMovement;
+
+	// Velocidad de rotación
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movimiento")
 	float RotationSpeed;
+
+	// Aumentar la velocidad de movimiento en los rebotes
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movimiento")
+	float SpeedIncrease;
+
+	// Velocidad máxima
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movimiento")
+	float MaxSpeed;
+
+	// Manejador de colisiones
+	virtual void NotifyHit(
+		class UPrimitiveComponent* MyComp,
+		class AActor* Other,
+		class UPrimitiveComponent* OtherComp,
+		bool bSelfMoved,
+		FVector HitLocation,
+		FVector HitNormal,
+		FVector NormalImpulse,
+		const FHitResult& Hit
+	) override;
 
 };
