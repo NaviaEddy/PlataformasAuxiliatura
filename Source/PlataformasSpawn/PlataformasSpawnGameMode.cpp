@@ -4,6 +4,7 @@
 #include "PlataformasSpawnCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Plataformas.h"
+#include "Barril.h"
 
 APlataformasSpawnGameMode::APlataformasSpawnGameMode()
 {
@@ -27,7 +28,7 @@ APlataformasSpawnGameMode::APlataformasSpawnGameMode()
 void APlataformasSpawnGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < 4; i++) {
 		PT = GetWorld()->SpawnActor<APlataformas>(APlataformas::StaticClass(), Posicion, Rotacion);
 		ContPlataformas.Add(PT);
 		Posicion.Z += 400.0f;
@@ -39,6 +40,8 @@ void APlataformasSpawnGameMode::BeginPlay()
 	spawnsPlataformas = ContPlataformas.Num() - 1; //4 elementos [0,1,2,3]
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, 
 		FString::Printf(TEXT("Cantidad del contenedor: %d"), ContPlataformas.Num()));
+
+	Ba = GetWorld()->SpawnActor<ABarril>(ABarril::StaticClass(), FVector(1210.f, 970.f, 1760.f), FRotator::ZeroRotator);
 }
 
 void APlataformasSpawnGameMode::Tick(float DeltaTime)
@@ -47,7 +50,8 @@ void APlataformasSpawnGameMode::Tick(float DeltaTime)
 	
 	Time += DeltaTime;
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue,
+	//Codigo para eliminar plataformas con un reloj.
+	/*GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue,
 		FString::Printf(TEXT("Cantidad del contenedor: %d"), ContPlataformas.Num()));
 
 	if (Time > 3.0f) {
@@ -59,6 +63,6 @@ void APlataformasSpawnGameMode::Tick(float DeltaTime)
 			spawnsPlataformas -= 1;
 		}
 		
-	}
+	}*/
 	
 }

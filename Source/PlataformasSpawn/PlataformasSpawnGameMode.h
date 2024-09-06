@@ -24,12 +24,15 @@ public:
 
 private:
 	TArray<AActor*> ContPlataformas;
-	class APlataformas* PT;
 	FVector Posicion;
 	float PosicionAuxiliar;
 	FRotator Rotacion;
 	int spawnsPlataformas;
 	float Time;
+
+	//Clases
+	class APlataformas* PT;
+	class ABarril* Ba;
 };
 
 
